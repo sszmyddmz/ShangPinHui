@@ -4,7 +4,6 @@ import mockRequests from './mockAjax'
 
 //三级联动接口
 //  /api/product/getBaseCategoryList get方式 无参数
-
 //调这个函数就发送请求,axios发请求返回结果Promise对象
 export const reqCategoryList = ()=>requests({url:'/product/getBaseCategoryList', method:'get'});
 
@@ -25,3 +24,16 @@ export const reqGoodsInfo = (skuId)=>requests({url:`/item/${skuId}`,method:'get'
 //将产品添加到购物车(对已有物品进行数量改动)
 //URL:/api/cart/addToCart/{skuId}/{skuNum}  post
 export const reqAddOrUpdateShopCart = (skuId,skuNum)=>requests({url:`/cart/addToCart/${skuId}/${skuNum}`,method:'post'});
+
+//获取购物车列表数据接口
+//URL:/api/cart/cartList   get 
+export const reqCartList = ()=>requests({url:'/cart/cartList',method:'get'});
+
+//删除购物产品的接口
+//URL:/api/cart/deleteCart/{skuId}   method:DELETE  
+export const reqDeleteCartById = (skuId)=>requests({url:`/cart/deleteCart/${skuId}`,method:'delete'});
+
+//修改商品的选中状态
+//URL:/api/cart/checkCart/{skuId}/{isChecked}   method:get 
+export const reqUpdateCheckedByid = (skuId,isChecked)=>requests({url:`/cart/checkCart/${skuId}/${isChecked}`,method:'get'});
+

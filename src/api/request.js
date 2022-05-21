@@ -3,6 +3,9 @@ import axios from "axios"
 //引入进度条和样式
 import nprogress from "nprogress"
 import "nprogress/nprogress.css"
+//当前模块引入store（获取游客身份等）
+import store from '@/store'
+
 
 // axios是基于promise的一个http库,axios返回的就是一个Promise对象
 
@@ -18,6 +21,11 @@ const requests = axios.create({
 
 //请求拦截器：在发请求之前，请求拦截器可以检测到，可以在请求发出去之前做一些事情
 requests.interceptors.request.use((config)=>{
+    //通过上行请求的请求头，把用户临时身份带给服务器
+     //请求头添加的属性名字userTempid不能瞎写，因为已经和后台人员商量好了
+    if(store.state.detail.uuid_token){
+        config.headers.userTempId = store.state.detail.uuid_token;
+    }
     //config：配置对象，对象里面有个属性很重要，headers请求头
     //进度条开始
     nprogress.start()
