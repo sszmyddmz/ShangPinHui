@@ -22,11 +22,15 @@ const requests = axios.create({
 //请求拦截器：在发请求之前，请求拦截器可以检测到，可以在请求发出去之前做一些事情
 requests.interceptors.request.use((config)=>{
     //通过上行请求的请求头，把用户临时身份带给服务器
+    //config：配置对象，对象里面有个属性很重要，headers请求头
      //请求头添加的属性名字userTempid不能瞎写，因为已经和后台人员商量好了
     if(store.state.detail.uuid_token){
         config.headers.userTempId = store.state.detail.uuid_token;
     }
-    //config：配置对象，对象里面有个属性很重要，headers请求头
+    //需要携带token带给服务器
+    if(store.state.user.token){
+        config.headers.token = store.state.user.token;
+    }
     //进度条开始
     nprogress.start()
     return config

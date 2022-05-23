@@ -8,12 +8,12 @@
       </h3>
       <div class="content">
         <label>手机号:</label>
-        <input type="text" placeholder="请输入你的手机号">
+        <input type="text" placeholder="请输入你的手机号" v-model="phone">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>验证码:</label>
-        <input type="text" placeholder="请输入验证码">
+        <input type="text" placeholder="请输入验证码" v-model="code">
         <button style="width:100px;height:38px" @click="getCode">
           获取验证码
         </button>
@@ -21,21 +21,21 @@
       </div>
       <div class="content">
         <label>登录密码:</label>
-        <input type="text" placeholder="请输入你的登录密码">
+        <input type="password" placeholder="请输入你的登录密码" v-model="password">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码">
+        <input type="password" placeholder="请输入确认密码" v-model="password1">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox">
+        <input name="m1" type="checkbox" v-model="agree">
         <span>同意协议并注册《尚品汇用户协议》</span>
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="btn">
-        <button>完成注册</button>
+        <button @click="userRegister">完成注册</button>
       </div>
     </div>
 
@@ -75,6 +75,37 @@
         agree: true,
       };
     },
+     methods: {
+      //获取验证码
+      async getCode() {
+        //简单判断一下---至少有数据
+        try {
+          //如果获取到验证码
+          const { phone } = this
+          //phone为true，才会执行后面的dispatch
+          phone && (await this.$store.dispatch("getCode", phone))
+          //将组件的code属性值变为仓库中验证码[验证码直接自己填写到页面上了]
+          //如果数据找不到在哪里，可以直接打印console.log(this.$store)
+          this.code = this.$store.state.user.code
+        } catch (error) {}
+      },
+      //用户注册
+      async userRegister() {
+        //const success = await this.$validator.validateAll()
+        //全部表单验证成功，在向服务器发请求，进行祖册
+        //只要有一个表单没有成功，不会发请求
+        // if (success) {
+          try {
+            const { phone, code, password, password1 } = this
+            await this.$store.dispatch("userRegister", {phone,code,password})
+            //注册成功进行路由的跳转
+            this.$router.push("/login")
+          } catch (error) {
+            alert(error.message)
+          }
+        // }
+    },
+    }
   }
 </script>
 
