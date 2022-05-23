@@ -33,8 +33,9 @@ export default {
     mounted() {
         //派发action，获取floor组件的数据
         this.$store.dispatch('getFloorList')
-        //获取用户信息
-        this.$store.dispatch('getUserInfo')
+        //获取用户信息。用前置路由守卫的话，就不用每次加载完派发了。
+        //直接在全局前置路由守卫中判断有没有用户信息，没有就派发，有就放行。
+        // this.$store.dispatch('getUserInfo')
     },
     computed:{
         ...mapState({

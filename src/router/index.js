@@ -3,6 +3,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import routes from './routes'
+//引入store
+import routes from "./routes";
 //使用插件
 Vue.use(VueRouter)
 
@@ -32,7 +34,7 @@ VueRouter.prototype.replace = function(location, resolve, reject){
 }
 
 //配置路由
-export default new VueRouter({
+let router = new VueRouter({
     //配置路由
     routes,
     //滚动行为的设置
@@ -42,3 +44,43 @@ export default new VueRouter({
         return { y: 0 }
    }
 })
+
+//全局守卫：前置守卫（在路由跳转之间进行判断）
+router.beforeEach(async (to, from, next)=>{
+    //to:获取到要跳转到的路由信息
+    //from：获取到从哪个路由跳转过来的信息
+    //next: next() 放行  next(path) 放行到指定路由  next(false)
+    //方便测试 统一放行
+    next();
+    let token  = store.state.user.token;
+    let name = store.state.user.userInfo.name;
+    //用户已经登录了
+    if(token){
+        //已经登录还想去登录页面------不行
+        if(to.path=="/login"||to.path=='/register'){
+            next('/');
+        }else{
+            //已经登陆了,访问的是非登录与注册页面
+            //登录了且拥有用户信息放行
+            if(name){
+                next();
+            }else{
+                //登录了但没有用户信息
+                //在路由跳转之前获取用户信息且放行
+                try {
+                    await store.dispatch('getUserInfo');
+                    next();
+                } catch (error) {
+                    //token失效，清除后重新登录
+                    await store.dispatch('userLogout');
+                    next('/login')
+                }
+            }
+        }
+    }else{
+        next();
+    }
+
+})
+
+export default router
