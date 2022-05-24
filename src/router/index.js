@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 
 import routes from './routes'
 //引入store
-import routes from "./routes";
+import store from "../store";
 //使用插件
 Vue.use(VueRouter)
 
