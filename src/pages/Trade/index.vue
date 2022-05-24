@@ -66,11 +66,11 @@
       <ul>
         <li>
           <b><i>{{orderInfo.totalNum}}</i>件商品，总商品金额</b>
-          <span>¥{{orderInfo.totalAmount}}.00</span>
+          <span>¥{{orderInfo.originalTotalAmount}}.00</span>
         </li>
         <li>
           <b>返现：</b>
-          <span>0.00</span>
+          <span>10.00</span>
         </li>
         <li>
           <b>运费：</b>
@@ -80,7 +80,8 @@
     </div>
     <div class="trade">
       <div class="price">
-        应付金额: <span>¥{{orderInfo.totalAmount}}.00</span>
+        <!-- 应付金额: <span>¥{{orderInfo.totalAmount}}.00</span> -->
+        应付金额: <span>¥{{orderInfo.originalTotalAmount}}.00</span>
       </div>
       <div class="receiveInfo">
         寄送至:
@@ -90,7 +91,9 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <div class="sub clearFix">
+      <a class="subBtn" @click="submitOrder">提交订单</a>
+    </div>
     </div>
   </div>
 </template>
@@ -129,7 +132,33 @@
         addressInfo.forEach((item) => (item.isDefault = 0))
         address.isDefault = 1
       },
+      //提交订单
+      async submitOrder() {
+        //交易编码
+        let {tradeNo} = this.orderInfo
+        //其余的六个参数
+        let data = {
+          consignee: this.userDefaultAddress.consignee, //收件人的名字
+          consigneeTel: this.userDefaultAddress.phoneNum, //收件人的手机号
+          deliveryAddress: this.userDefaultAddress.fullAddress, //收件人的地址
+          paymentWay: "ONLINE", //支付方式
+          orderComment: this.msg, //买家的留言信息
+          orderDetailList: this.orderInfo.detailArrayList, //商品清单
+        }
+        //需要带参数的：tradeNo
+        let result = await this.$API.reqSubmitOrder(tradeNo, data)
+        //提交订单成功
+        if (result.code == 200) {
+          this.orderId = result.data;
+          //路由跳转 + 路由传递参数
+          this.$router.push('/pay?orderId='+this.orderId);
+        //提交的订单失败
+        } else {
+          alert(result.data);
+        }
+      },
     },
+    
   }
 </script>
 
