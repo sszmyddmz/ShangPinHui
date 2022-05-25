@@ -127,11 +127,28 @@
           confirmButtonText: "已支付成功",
           //右上角的叉号
           showClose: false,
-          callback: action => {
-            this.$message({
-              type: 'info',
-              message: `action: ${ action }`
-            });
+          //关闭弹出框的配置值
+          beforeClose: (type, instance, done) => {
+            //type:区分取消|确定按钮
+            //instance：当前组件实例
+            //done:关闭弹出框的方法
+            if (type == "cancel") {
+              alert("请联系管理员")
+              //清除定时器
+              clearInterval(this.timer)
+              this.timer = null
+              //关闭弹出框
+              done()
+            } else {
+              //判断是否真的支付了
+              //开发人员：为了自己方便，这里判断先不要了
+              // if (this.code == 200) {
+                clearInterval(this.timer)
+                this.timer = null
+                done()
+                this.$router.push("/paysuccess")
+              // }
+            }
           }
         })
         //你需要知道支付成功|失败

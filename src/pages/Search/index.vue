@@ -89,19 +89,19 @@
         return {
             //search传给服务器的参数
             searchParams:{
-                    category1Id: "", //一级分类的id
-                    category2Id: "", //二级分类的id
-                    category3Id: "", //三级分类的id
-                    categoryName: "", //产品的名字
-                    keyword: "", //关键字
-                    props: [], //平台属性的选择参数
-                    trademark: "", //品牌参数
-                    //上面这七个参数：有用户选择决定的，因此初始值为空的
-                    //下面这三个：都有初始值
-                    order: "1:desc", //携带给服务器参数order--->初始值"1:desc"[综合降序]
-                    pageNo:1,
-                    // pageNo:parseInt(localStorage.getItem('pageNo'))||1, //获取第几页的数据，默认即为第一个的数据
-                    pageSize:3, //每一页需要展示多少条数据
+              category1Id: "", //一级分类的id
+              category2Id: "", //二级分类的id
+              category3Id: "", //三级分类的id
+              categoryName: "", //产品的名字
+              keyword: "", //关键字
+              props: [], //平台属性的选择参数
+              trademark: "", //品牌参数
+              //上面这七个参数：有用户选择决定的，因此初始值为空的
+              //下面这三个：都有初始值
+              order: "1:desc", //携带给服务器参数order--->初始值"1:desc"[综合降序]
+              pageNo:1,
+              // pageNo:parseInt(localStorage.getItem('pageNo'))||1, //获取第几页的数据，默认即为第一个的数据
+              pageSize:3, //每一页需要展示多少条数据
             }
         }
     },

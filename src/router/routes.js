@@ -9,8 +9,34 @@ import ShopCart from '@/pages/ShopCart'
 import Trade from '@/pages/Trade'
 import Pay from '@/pages/Pay'
 import PaySuccess from '@/pages/PaySuccess'
+import Center from '@/pages/Center'
+//引入二级路由
+import MyOrder from '@/pages/Center/myOrder'
+import GroupOrder from '@/pages/Center/groupOrder'
 
 export default [
+    {
+        path:"/center",
+        component:Center,
+        meta:{show:true},
+        //二级路由
+        children:[
+            {
+                //不写"/"或者写全path: '/center/myorder',
+                path:'myorder',
+                component:MyOrder,
+            },
+            {
+                path:'grouporder',
+                component:GroupOrder
+            },
+            //重定向.子路由为空的话，默认跳转到myorder。也可以在center中重定向，redirect写为'/center/myorder'
+            {
+                path: '',
+                redirect: 'myorder'
+            }
+        ]
+    },
     {
         path:"/paysuccess",
         component:PaySuccess,
@@ -29,17 +55,26 @@ export default [
         props: route => ({orderId: route.query.orderId}),
         // 只能从交易界面, 才能跳转到支付界面
         beforeEnter (to, from, next) {
-          if (from.path==='/trade') {
+          if (from.path == '/trade') {
             next()
           } else {
-            next('/trade')
+            next(false)
           }
         }
     },
     {
         path:"/trade",
         component:Trade,
-        meta:{show:true}
+        meta:{show:true},
+        //路由独享守卫
+        beforeEnter (to, from, next) {
+            //去交易页必须是从购物车页面来，其他的不能跳
+            if (from.path == '/shopcart') {
+              next()
+            } else {
+              next(false) //从哪儿来回哪儿去
+            }
+          }
     },
     {
         path:"/shopcart",
