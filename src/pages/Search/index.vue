@@ -49,7 +49,7 @@
                   <div class="p-img">
                       <!-- 属性值带变量 所以动态的前面加了冒号 -->
                     <router-link :to="`/detail/${good.id}`">
-                      <img :src="good.defaultImg" />
+                      <img v-lazy="good.defaultImg" />
                     </router-link>
                   </div>
                   <div class="price">

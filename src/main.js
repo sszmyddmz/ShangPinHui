@@ -21,6 +21,15 @@ import '@/mock/mockServe'
 //引入swiper样式
 import 'swiper/css/swiper.css'
 
+//引入插件
+import VueLazyload from 'vue-lazyload'
+import loadingImg from '@/assets/images/loadingImg.gif'
+//注册插件
+Vue.use(VueLazyload,{
+  //懒加载默认的图片
+  loading:loadingImg
+})
+
 //引入路由
 import router from '@/router'
 
@@ -34,6 +43,8 @@ reqCategoryList()
 //统一引入
 import * as API from '@/api'
 
+//引入表单校验插件
+import "@/plugins/validate"
 
 Vue.config.productionTip = false
 
