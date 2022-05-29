@@ -46,6 +46,12 @@ import * as API from '@/api'
 //引入表单校验插件
 import "@/plugins/validate"
 
+//引入自定义插件
+import myPlugins from '@/plugins/myPlugins'
+Vue.use(myPlugins,{
+    name:'upper'
+})
+
 Vue.config.productionTip = false
 
 new Vue({
